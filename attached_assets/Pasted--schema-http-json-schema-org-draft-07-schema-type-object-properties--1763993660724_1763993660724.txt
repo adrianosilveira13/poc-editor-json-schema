@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "flowName": {
+      "type": "string",
+      "title": "Nome do Fluxo de Petição",
+      "description": "Ex: 'Petição Inicial - Direito do Trabalho'"
+    },
+    "steps": {
+      "type": "array",
+      "title": "Sequência de Steps",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID Único do Step",
+            "description": "Gerado automaticamente ou custom"
+          },
+          "type": {
+            "type": "string",
+            "title": "Tipo Pré-Feito",
+            "enum": [
+              "gerar-argumentos",
+              "inserir-jurisprudencia",
+              "resumir-fatos",
+              "gerar-pedido-final",
+              "custom"
+            ],
+            "description": "Selecione um step pré-feito ou 'custom' para total liberdade"
+          },
+          "promptName": {
+            "type": "string",
+            "title": "Nome do Prompt",
+            "description": "Ex: 'prompt-argumentos-trabalhistas' (customizável)"
+          },
+          "promptTemplate": {
+            "type": "string",
+            "title": "Template do Prompt",
+            "multiline": true,
+            "description": "Texto customizável com placeholders para LangChain, ex: 'Gere argumentos para {tipo_acao} baseado em {fatos_cliente} citando {leis_relevantes}.'"
+          },
+          "parameters": {
+            "type": "object",
+            "title": "Parâmetros Customizáveis",
+            "properties": {
+              "inputVars": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Variáveis de input, ex: ['fatos_cliente', 'leis_relevantes']"
+              },
+              "outputVar": {
+                "type": "string",
+                "description": "Nome da saída para o próximo step, ex: 'argumentos_gerados'"
+              },
+              "requiredFields": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Campos obrigatórios para petições, ex: ['citar-artigo-5']"
+              }
+            }
+          }
+        },
+        "required": ["id", "type", "promptName", "promptTemplate"]
+      }
+    }
+  },
+  "required": ["flowName", "steps"]
+}
